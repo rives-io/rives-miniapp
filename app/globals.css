@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.pixelated-font {
+  text-transform: uppercase;
+  letter-spacing: -0.125em;
+  font-weight: normal;
+  font-family: 'Silkscreen';
+}
+
+.pixelated-font::first-letter {
+  margin-left: -0.12em;
+}
+
+:root {
+    --background: #8b5cf6;
+    --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #8b5cf6;
+        --foreground: #ededed;
+    }
+}
+
+body {
+    color: var(--foreground);
+    background: var(--background);
+    font-family: Arial, Helvetica, sans-serif;
+    @apply text-white;
+}
+
+.base-blue {
+    background-color: #0052ff;
+}
+
+.base-blue:hover {
+    background-color: #0047e1;
+}
+
+.base-blue:active {
+    background-color: #003db8;
+}
+
+#emulator-screen {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+}
+
+#emulator-screen-connect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+}
