@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { MiniKitContextProvider } from '@/providers/MiniKitProvider';
+import { MiniKitContextProvider } from '@/app/providers/MiniKitProvider';
 import "@coinbase/onchainkit/styles.css";
 
 const geistSans = Geist({

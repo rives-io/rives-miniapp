@@ -46,7 +46,7 @@ body {
     background-color: #003db8;
 }
 
-#emulator-screen {
+.emulator-screen {
     width: 100%;
     height: 100%;
     aspect-ratio: 1;
