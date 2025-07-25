@@ -24,7 +24,7 @@ function Play({ruleInfo, cartridgeInfo, cartridgeData}:{ruleInfo:RuleInfo, cartr
   const [gameState, setGameState] = useState(GAME_STATE.OFF);
 
   const { setFrameReady, isFrameReady } = useMiniKit();
-  const { address, isConnected, isConnecting, isDisconnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const rivemuRef = useRef<RivemuRef>(null);
 
   // The setFrameReady() function is called when your mini-app is ready to be shown
@@ -72,7 +72,7 @@ function Play({ruleInfo, cartridgeInfo, cartridgeData}:{ruleInfo:RuleInfo, cartr
 
             {
               gameState == GAME_STATE.PAUSED?
-                <div className='absolute top-1/2 w-full text-center bg-black animate-pulse pixelated-font'>PAUSED - press "PAUSE" again to resume</div>
+                <div className='absolute top-1/2 w-full text-center bg-black animate-pulse pixelated-font'>PAUSED - press 'PAUSE' again to resume</div>
               :
                 <></>
             }
