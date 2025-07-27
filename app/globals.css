@@ -34,6 +34,14 @@ body {
     @apply text-white;
 }
 
+.bg-rives-purple {
+    background-color: #8b5cf6;
+}
+
+.text-rives-purple {
+    color: #8b5cf6;
+}
+
 .base-blue {
     background-color: #0052ff;
 }

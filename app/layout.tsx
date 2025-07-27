@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { MiniKitContextProvider } from '@/app/providers/MiniKitProvider';
 import "@coinbase/onchainkit/styles.css";
+import { GameStateProvider } from "./providers/GameStateProvider";
+import { ConsoleStateProvider } from "./providers/ConsoleStateProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,7 +53,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[424px] max-h-[695px]`}
       >
         <MiniKitContextProvider>
-          {children}
+          <ConsoleStateProvider>
+            <GameStateProvider>
+              {children}
+            </GameStateProvider>
+          </ConsoleStateProvider>
         </MiniKitContextProvider>
       </body>
     </html>

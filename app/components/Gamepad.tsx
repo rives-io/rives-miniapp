@@ -1,8 +1,11 @@
 "use client"
 
+import { Name } from '@coinbase/onchainkit/identity';
+import { ConnectWallet, Wallet } from '@coinbase/onchainkit/wallet';
 import React, { useState } from 'react'
 import { Joystick } from 'react-joystick-component';
 import { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
+import { useAccount } from 'wagmi';
 
 
 // keymap from https://github.com/rives-io/riv/blob/main/rivemu-web/gamepad.js
@@ -33,7 +36,9 @@ function handleGamepadButtonClick(event_type:"keyup"|"keydown", btn_id:string) {
 }
 
 function Gamepad() {
+    const { address, isConnected } = useAccount();
     const [joystickDirection, setJoystickDirection] = useState<string|null>(null)
+
     function handleMove(event: IJoystickUpdateEvent): void {
         if (!event.direction) return;
 
@@ -54,7 +59,19 @@ function Gamepad() {
     }
 
 
-  return (
+    if (!(isConnected || address)) {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <Wallet className="base-blue rounded-xl">
+                <ConnectWallet>
+                    <Name className="text-inherit" />
+                </ConnectWallet>
+                </Wallet>
+            </div>
+        );
+    }
+  
+    return (
     <div className='w-full min-fit flex justify-between'>
         {/* directional buttons */}
         <div className='w-[150px] h-[150px] relative'>

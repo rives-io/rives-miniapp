@@ -1,7 +1,9 @@
 import Header from '@components/Header';
-import Play from '@components/Play';
 import { envClient } from '@utils/clientEnv';
 import { buildUrl, getCartridgeInfo, getRule } from '@utils/utils';
+import ConsoleControls from './components/ConsoleControls';
+import Gamepad from '@components/Gamepad';
+
 
 
 const getCartridgeData = async (cartridgeId:string): Promise<Uint8Array|null> => {
@@ -47,7 +49,8 @@ export default async function HomePage() {
   return (
     <main className='p-2'>
       <Header/>
-      <Play ruleInfo={ruleInfo} cartridgeInfo={cartridgeInfo} cartridgeData={cartridgeData}/>
+      <ConsoleControls ruleInfo={ruleInfo} cartridgeInfo={cartridgeInfo} cartridgeData={cartridgeData}/>
+      <Gamepad/>
     </main>
   );
 }
