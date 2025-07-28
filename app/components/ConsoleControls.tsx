@@ -13,6 +13,7 @@ import { CartridgeInfo, RuleInfo } from '@/app/utils/utils';
 import gameGIF from "@public/game.gif";
 import { COMMAND, GAME_STATE, GameStateContext } from '@/app/providers/GameStateProvider';
 import Help from './Display/Help';
+import Leaderboard from './Display/Leaderboard';
 
 
 function ConsoleControls({ruleInfo, cartridgeInfo, cartridgeData}:
@@ -85,10 +86,23 @@ function ConsoleControls({ruleInfo, cartridgeInfo, cartridgeData}:
                          leaveFrom="opacity-100"
                          leaveTo="opacity-0"
                         >
-                            <div className='absolute top-0 left-0 z-10'>
+                            <div className='absolute top-0 left-0 z-10 w-full'>
                                 <Help cartridge_desc={cartridgeInfo.info?.description} 
                                 rule_desc={ruleInfo.name === "default" ? "Standard Contest" : ruleInfo.description}
                                 />
+                            </div>
+                        </Transition>
+
+                        <Transition show={consoleState === CONSOLE_STATE.LEADERBOARD}
+                         enter="transition-opacity duration-300"
+                         enterFrom="opacity-0"
+                         enterTo="opacity-100"
+                         leave="transition-opacity duration-200"
+                         leaveFrom="opacity-100"
+                         leaveTo="opacity-0"
+                        >
+                            <div className='absolute top-0 left-0 z-10 w-full'>
+                                <Leaderboard ruleInfo={ruleInfo} />
                             </div>
                         </Transition>
                     </div>

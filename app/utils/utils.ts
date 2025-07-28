@@ -411,3 +411,27 @@ export async function submitGameplay(
 
   await publicClient.waitForTransactionReceipt({ hash: txHash });
 }
+
+
+export async function getTapeGif(tape_id:string):Promise<string|null> {
+    try {
+        const response = await fetch(buildUrl(process.env.GIF_SERVER_URL || "", "gifs"),
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify([tape_id])
+            }
+        );
+
+        if (!response.ok || response.status === 204) return null;
+
+        const gif = await response.json();
+
+        return gif[0];
+    } catch (e) {
+        console.log(`Error fetching gif: ${e}`)
+        return null;
+    }
+}
