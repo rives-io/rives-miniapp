@@ -37,25 +37,56 @@ function handleGamepadButtonClick(event_type:"keyup"|"keydown", btn_id:string) {
 
 function Gamepad() {
     const { address, isConnected } = useAccount();
-    const [joystickDirection, setJoystickDirection] = useState<string|null>(null)
+    const [joystickDirectionX, setJoystickDirectionX] = useState<string|null>(null)
+    const [joystickDirectionY, setJoystickDirectionY] = useState<string|null>(null)
 
     function handleMove(event: IJoystickUpdateEvent): void {
         if (!event.direction) return;
 
-        if (joystickDirection && event.direction != joystickDirection) {
-            // keyup previous direction
-            handleGamepadButtonClick("keyup", joystickDirection);
+        let currentDirectionX = event.direction == "LEFT" || event.direction == "RIGHT" ? event.direction : "";
+        let currentDirectionY = event.direction == "FORWARD" || event.direction == "BACKWARD" ? event.direction : "";
+
+        if (currentDirectionX.length == 0 && event.x) {
+            if (event.x > 0.33) {
+                currentDirectionX = "RIGHT";
+            }
+            else if (event.x < -0.33) {
+                currentDirectionX = "LEFT";
+            }
         }
-        
-        // update direction and keydown
-        setJoystickDirection(event.direction);
-        handleGamepadButtonClick("keydown", event.direction);
+
+        if (currentDirectionY.length == 0 && event.y) {
+            if (event.y > 0.33) {
+                currentDirectionY = "FORWARD";
+            }
+            else if (event.y < -0.33) {
+                currentDirectionY = "BACKWARD";
+            }
+        }
+
+        if (joystickDirectionX && joystickDirectionX != currentDirectionX) {
+            // keyup previous directionX
+            handleGamepadButtonClick("keyup", joystickDirectionX);
+        }
+        if (joystickDirectionY && joystickDirectionY != currentDirectionY) {
+            // keyup previous directionY
+            handleGamepadButtonClick("keyup", joystickDirectionY);
+        }
+
+        setJoystickDirectionX(currentDirectionX);
+        setJoystickDirectionY(currentDirectionY);
+        handleGamepadButtonClick("keydown", currentDirectionX);
+        handleGamepadButtonClick("keydown", currentDirectionY);
     }
 
     function handleStop(event: IJoystickUpdateEvent): void {
-        if (!joystickDirection) return;
-        
-        handleGamepadButtonClick("keyup", joystickDirection);
+        if (joystickDirectionX) {
+            handleGamepadButtonClick("keyup", joystickDirectionX);
+        }
+
+        if (joystickDirectionY) {
+            handleGamepadButtonClick("keyup", joystickDirectionY);
+        }
     }
 
 
