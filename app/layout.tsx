@@ -51,6 +51,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       <body
         // max-w and max-h set according to instructions on https://miniapps.farcaster.xyz/docs/specification#size--orientation
         className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[424px] max-h-[695px]`}
