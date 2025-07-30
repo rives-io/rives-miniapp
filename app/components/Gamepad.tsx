@@ -74,13 +74,21 @@ function Gamepad() {
     return (
     <div className='w-full min-fit flex justify-between'>
         {/* directional buttons */}
-        <div className='w-[150px] h-[150px] relative'>
+        <div className='w-[150px] h-[150px] relative flex items-center'>
             <Joystick size={120} sticky={false} baseColor="#374151" stickColor="#1f2937" move={handleMove} stop={handleStop}></Joystick>
         </div>
 
         {/* action buttons */}
         <div className='w-[150px] h-[150px] relative'>
-            <button className='absolute end-[0px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
+            <button className='absolute top-0 end-[50px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
+            onTouchStart={() => handleGamepadButtonClick("keydown", "V")} 
+            onTouchEnd={() => handleGamepadButtonClick("keyup", "V")}
+            onCopy={() => null}
+            >
+                <span className='pixelated-font text-3xl'>V</span>
+            </button>
+
+            <button className='absolute top-[50px] start-[100px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
             onTouchStart={() => handleGamepadButtonClick("keydown", "X")} 
             onTouchEnd={() => handleGamepadButtonClick("keyup", "X")}
             onCopy={() => null}
@@ -88,7 +96,7 @@ function Gamepad() {
                 <span className='pixelated-font text-3xl'>X</span>
             </button>
 
-            <button className='absolute end-[60px] top-[25px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
+            <button className='absolute top-[100px] start-[50px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
             onTouchStart={() => handleGamepadButtonClick("keydown", "Z")} 
             onTouchEnd={() => handleGamepadButtonClick("keyup", "Z")}
             onCopy={() => null}
@@ -96,15 +104,7 @@ function Gamepad() {
                 <span className='pixelated-font text-3xl'>Z</span>
             </button>
 
-            <button className='absolute top-[60px] end-[0px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
-            onTouchStart={() => handleGamepadButtonClick("keydown", "F")} 
-            onTouchEnd={() => handleGamepadButtonClick("keyup", "F")}
-            onCopy={() => null}
-            >
-                <span className='pixelated-font text-3xl'>F</span>
-            </button>
-
-            <button className='absolute end-[60px] top-[85px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
+            <button className='absolute top-[50px] start-0 w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
             onTouchStart={() => handleGamepadButtonClick("keydown", "C")} 
             onTouchEnd={() => handleGamepadButtonClick("keyup", "C")}
             onCopy={() => null}
