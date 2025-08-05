@@ -9,7 +9,7 @@ import { getOutputs, VerificationOutput, VerifyPayloadProxyInput } from '@/app/u
 import { DecodedIndexerOutput } from '@/app/utils/backend-libs/cartesapp/lib';
 
 const RIVES_NODE_URL = process.env.NEXT_PUBLIC_RIVES_NODE_URL;
-const PAGE_SIZE = 15;
+const PAGE_SIZE = 20;
 
 function Leaderboard({ruleInfo}:{ruleInfo:RuleInfo}) {
     const [rankingFocus, setRankingFocus] = useState(1);
@@ -143,27 +143,39 @@ function Leaderboard({ruleInfo}:{ruleInfo:RuleInfo}) {
             </div>
 
             <div>
-                <div className='flex flex-col min-w-0'>
-                    {data.pages.map((page, index) => (
-                        page.data.map((output, index2) => {
-                            const currentRanking = index * PAGE_SIZE + index2 + 1;
-                            return (
-                                <div 
-                                ref={currentRanking === rankingFocus+1? nextRankingFocusRef: currentRanking === rankingFocus-1? prevRankingFocusRef:undefined} 
-                                key={`${output._msgSender}+${output._timestamp}`}
-                                className={`flex justify-between p-2 ${rankingFocus === currentRanking ? 'bg-rives-purple' : ''}`} 
-                                >
-                                    <span className='text-xs'>{currentRanking}</span>
-                                    <span className='text-xs'>
-                                        {output.user_address?.substring(0, 6)}...{output.user_address?.substring(output.user_address.length - 4)}
-                                    </span>
-                                    <span className='text-xs'>{output._timestamp}</span>
-                                    <span className='text-xs'>{output.score.toString()}</span>
-                                </div>
-                            )
-                        })
-                    ))}
+                <table className='w-full'>
+                    <thead>
+                        <tr>
+                            <th scope='col'>Rank</th>
+                            <th scope='col'>User</th>
+                            <th scope='col'>Timestamp</th>
+                            <th scope='col'>Score</th>
+                        </tr>
+                    </thead>
 
+                    <tbody>
+                        {data.pages.map((page, index) => (
+                            page.data.map((output, index2) => {
+                                const currentRanking = index * PAGE_SIZE + index2 + 1;
+                                return (
+                                    <tr 
+                                    ref={currentRanking === rankingFocus+1? nextRankingFocusRef: currentRanking === rankingFocus-1? prevRankingFocusRef:undefined} 
+                                    key={`${output._msgSender}+${output._timestamp}`}
+                                    className={`p-2 ${rankingFocus === currentRanking ? 'bg-rives-purple' : ''}`} 
+                                    >
+                                        <td className='text-xs'>{currentRanking}</td>
+                                        <td className='text-xs'>
+                                            {output.user_address?.substring(0, 6)}...{output.user_address?.substring(output.user_address.length - 4)}
+                                        </td>
+                                        <td className='text-xs'>{new Date((output._timestamp as number) * 1000).toLocaleString().substring(0, 17)}</td>
+                                        <td className='text-xs'>{output.score.toString()}</td>
+                                    </tr>
+                                )
+                            })
+                        ))}
+                    </tbody>
+                </table>
+                <div className='flex flex-col min-w-0'>
                     <div ref={ref} className='h-3'>
                         <span className={`text-xs ${!isFetchingNextPage? "hidden": ""}`}>Loading...</span>
                     </div>

@@ -27,6 +27,11 @@
     }
 }
 
+html, body {
+  touch-action: none; /* disables all default gestures like zoom and scroll */
+  overscroll-behavior: none; /* prevents pull-to-refresh etc. */
+}
+
 body {
     color: var(--foreground);
     background: var(--background);

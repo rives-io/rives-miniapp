@@ -9,11 +9,6 @@ import { ConsoleStateProvider } from "./providers/ConsoleStateProvider";
 import ReactQueryProvider from "./providers/ReactQueryProvider";
 
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -22,8 +17,6 @@ const geistMono = Geist_Mono({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -60,7 +53,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         // max-w and max-h set according to instructions on https://miniapps.farcaster.xyz/docs/specification#size--orientation
-        className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[424px] max-h-[695px]`}
+        className={`${geistMono.className} antialiased max-w-[424px] max-h-[695px]`}
       >
         <MiniKitContextProvider>
           <ReactQueryProvider>
