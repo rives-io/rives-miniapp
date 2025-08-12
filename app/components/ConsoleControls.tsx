@@ -12,14 +12,17 @@ import Play from '@/app/components/Display/Play';
 import { CartridgeInfo, RuleInfo } from '@/app/utils/utils';
 import gameGIF from "@public/game.gif";
 import { COMMAND, GAME_STATE, GameStateContext } from '@/app/providers/GameStateProvider';
+import { GameplayStateContext } from '@/app/providers/GameplayStateProvider';
 import Help from './Display/Help';
 import Leaderboard from './Display/Leaderboard';
+import Submit from './Display/Submit';
 
 
 function ConsoleControls({ruleInfo, cartridgeInfo, cartridgeData}:
 {ruleInfo:RuleInfo, cartridgeInfo:CartridgeInfo, cartridgeData:Uint8Array<ArrayBufferLike>}) {
     const { consoleState, setConsoleState } = useContext(ConsoleStateContext);
     const { gameState, setGameCommand } = useContext(GameStateContext);
+    const { gameplay } = useContext(GameplayStateContext);
     
     const { setFrameReady, isFrameReady } = useMiniKit();
     const { address, isConnected } = useAccount();
@@ -29,6 +32,17 @@ function ConsoleControls({ruleInfo, cartridgeInfo, cartridgeData}:
         setFrameReady();
         }
     }, [setFrameReady, isFrameReady]);
+
+    useEffect(() => {
+        // set console state to submit if
+        // there is a gameplay to be send
+        if (gameplay) {
+            setConsoleState(CONSOLE_STATE.SUBMIT);
+        } else {
+            setConsoleState(CONSOLE_STATE.PLAY);
+            setGameCommand(COMMAND.RESTART);
+        }
+    }, [gameplay])
 
     const handlePause = () => {
         if (consoleState === CONSOLE_STATE.PLAY) {
@@ -103,6 +117,19 @@ function ConsoleControls({ruleInfo, cartridgeInfo, cartridgeData}:
                         >
                             <div className='absolute top-0 left-0 z-10 w-full'>
                                 <Leaderboard ruleInfo={ruleInfo} />
+                            </div>
+                        </Transition>
+
+                        <Transition show={consoleState === CONSOLE_STATE.SUBMIT}
+                         enter="transition-opacity duration-300"
+                         enterFrom="opacity-0"
+                         enterTo="opacity-100"
+                         leave="transition-opacity duration-200"
+                         leaveFrom="opacity-100"
+                         leaveTo="opacity-0"
+                        >
+                            <div className='absolute top-0 left-0 z-10 w-full'>
+                                <Submit />
                             </div>
                         </Transition>
                     </div>

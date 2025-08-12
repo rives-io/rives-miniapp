@@ -7,6 +7,7 @@ import "@coinbase/onchainkit/styles.css";
 import { GameStateProvider } from "./providers/GameStateProvider";
 import { ConsoleStateProvider } from "./providers/ConsoleStateProvider";
 import ReactQueryProvider from "./providers/ReactQueryProvider";
+import { GameplayStateProvider } from "./providers/GameplayStateProvider";
 
 
 const geistMono = Geist_Mono({
@@ -59,7 +60,9 @@ export default function RootLayout({
           <ReactQueryProvider>
             <ConsoleStateProvider>
               <GameStateProvider>
-                {children}
+                <GameplayStateProvider>
+                  {children}
+                </GameplayStateProvider>
               </GameStateProvider>
             </ConsoleStateProvider>
           </ReactQueryProvider>

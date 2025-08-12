@@ -149,6 +149,26 @@ export function getChain(chainId: number | string) {
   return chain;
 }
 
+export const publicClient = createPublicClient({ 
+    chain: getChain(envClient.NETWORK_CHAIN_ID),
+    transport: http()
+    //transport: http(envClient.NETWORK_CHAIN_ID == "0xAA36A7" ? "https://ethereum-sepolia-rpc.publicnode.com" : undefined)
+})
+
+const humanWorldAbi = [
+    // Read-Only Functions
+    "function getCartridgeInsertionModel() view returns ((address,bytes))",
+    "function getTapeSubmissionModel(bytes32) view returns ((address,bytes))",
+    "function getCartridgeOwner(bytes32) view returns (address)",
+    "function getRegisteredModel(address) view returns (bool)",
+
+    // Authenticated Functions
+    "function setTapeSubmissionModel(bytes32 cartridgeId,address modelAddress, bytes config)",
+    "function addInput(address _dapp, bytes payload)",
+];
+
+export const worldAbi = parseAbi(humanWorldAbi);
+
 type EIP1193ProviderExt = Partial<EIP1193Provider> & {
   chainId?: `0x${string}`;
 };

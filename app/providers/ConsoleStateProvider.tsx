@@ -5,7 +5,8 @@ import { createContext, ReactNode, useState } from "react"
 export enum CONSOLE_STATE {
   PLAY,
   LEADERBOARD,
-  HELP
+  HELP,
+  SUBMIT
 }
 
 
