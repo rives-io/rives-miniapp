@@ -27,11 +27,24 @@
     }
 }
 
+html, body {
+  touch-action: none; /* disables all default gestures like zoom and scroll */
+  overscroll-behavior: none; /* prevents pull-to-refresh etc. */
+}
+
 body {
     color: var(--foreground);
     background: var(--background);
     font-family: Arial, Helvetica, sans-serif;
     @apply text-white;
+}
+
+.bg-rives-purple {
+    background-color: #8b5cf6;
+}
+
+.text-rives-purple {
+    color: #8b5cf6;
 }
 
 .base-blue {

@@ -1,8 +1,11 @@
 "use client"
 
+import { Name } from '@coinbase/onchainkit/identity';
+import { ConnectWallet, Wallet } from '@coinbase/onchainkit/wallet';
 import React, { useState } from 'react'
 import { Joystick } from 'react-joystick-component';
 import { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
+import { useAccount } from 'wagmi';
 
 
 // keymap from https://github.com/rives-io/riv/blob/main/rivemu-web/gamepad.js
@@ -33,37 +36,90 @@ function handleGamepadButtonClick(event_type:"keyup"|"keydown", btn_id:string) {
 }
 
 function Gamepad() {
-    const [joystickDirection, setJoystickDirection] = useState<string|null>(null)
+    const { address, isConnected } = useAccount();
+    const [joystickDirectionX, setJoystickDirectionX] = useState<string|null>(null)
+    const [joystickDirectionY, setJoystickDirectionY] = useState<string|null>(null)
+
     function handleMove(event: IJoystickUpdateEvent): void {
         if (!event.direction) return;
 
-        if (joystickDirection && event.direction != joystickDirection) {
-            // keyup previous direction
-            handleGamepadButtonClick("keyup", joystickDirection);
+        let currentDirectionX = event.direction == "LEFT" || event.direction == "RIGHT" ? event.direction : "";
+        let currentDirectionY = event.direction == "FORWARD" || event.direction == "BACKWARD" ? event.direction : "";
+
+        if (currentDirectionX.length == 0 && event.x) {
+            if (event.x > 0.33) {
+                currentDirectionX = "RIGHT";
+            }
+            else if (event.x < -0.33) {
+                currentDirectionX = "LEFT";
+            }
         }
-        
-        // update direction and keydown
-        setJoystickDirection(event.direction);
-        handleGamepadButtonClick("keydown", event.direction);
+
+        if (currentDirectionY.length == 0 && event.y) {
+            if (event.y > 0.33) {
+                currentDirectionY = "FORWARD";
+            }
+            else if (event.y < -0.33) {
+                currentDirectionY = "BACKWARD";
+            }
+        }
+
+        if (joystickDirectionX && joystickDirectionX != currentDirectionX) {
+            // keyup previous directionX
+            handleGamepadButtonClick("keyup", joystickDirectionX);
+        }
+        if (joystickDirectionY && joystickDirectionY != currentDirectionY) {
+            // keyup previous directionY
+            handleGamepadButtonClick("keyup", joystickDirectionY);
+        }
+
+        setJoystickDirectionX(currentDirectionX);
+        setJoystickDirectionY(currentDirectionY);
+        handleGamepadButtonClick("keydown", currentDirectionX);
+        handleGamepadButtonClick("keydown", currentDirectionY);
     }
 
     function handleStop(event: IJoystickUpdateEvent): void {
-        if (!joystickDirection) return;
-        
-        handleGamepadButtonClick("keyup", joystickDirection);
+        if (joystickDirectionX) {
+            handleGamepadButtonClick("keyup", joystickDirectionX);
+        }
+
+        if (joystickDirectionY) {
+            handleGamepadButtonClick("keyup", joystickDirectionY);
+        }
     }
 
 
-  return (
+    if (!(isConnected || address)) {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <Wallet className="base-blue rounded-xl">
+                <ConnectWallet>
+                    <Name className="text-inherit" />
+                </ConnectWallet>
+                </Wallet>
+            </div>
+        );
+    }
+  
+    return (
     <div className='w-full min-fit flex justify-between'>
         {/* directional buttons */}
-        <div className='w-[150px] h-[150px] relative'>
+        <div className='w-[150px] h-[150px] relative flex items-center'>
             <Joystick size={120} sticky={false} baseColor="#374151" stickColor="#1f2937" move={handleMove} stop={handleStop}></Joystick>
         </div>
 
         {/* action buttons */}
         <div className='w-[150px] h-[150px] relative'>
-            <button className='absolute end-[0px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
+            <button className='absolute top-0 end-[50px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
+            onTouchStart={() => handleGamepadButtonClick("keydown", "V")} 
+            onTouchEnd={() => handleGamepadButtonClick("keyup", "V")}
+            onCopy={() => null}
+            >
+                <span className='pixelated-font text-3xl'>V</span>
+            </button>
+
+            <button className='absolute top-[50px] start-[100px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
             onTouchStart={() => handleGamepadButtonClick("keydown", "X")} 
             onTouchEnd={() => handleGamepadButtonClick("keyup", "X")}
             onCopy={() => null}
@@ -71,7 +127,7 @@ function Gamepad() {
                 <span className='pixelated-font text-3xl'>X</span>
             </button>
 
-            <button className='absolute end-[60px] top-[25px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
+            <button className='absolute top-[100px] start-[50px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
             onTouchStart={() => handleGamepadButtonClick("keydown", "Z")} 
             onTouchEnd={() => handleGamepadButtonClick("keyup", "Z")}
             onCopy={() => null}
@@ -79,15 +135,7 @@ function Gamepad() {
                 <span className='pixelated-font text-3xl'>Z</span>
             </button>
 
-            <button className='absolute top-[60px] end-[0px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
-            onTouchStart={() => handleGamepadButtonClick("keydown", "F")} 
-            onTouchEnd={() => handleGamepadButtonClick("keyup", "F")}
-            onCopy={() => null}
-            >
-                <span className='pixelated-font text-3xl'>F</span>
-            </button>
-
-            <button className='absolute end-[60px] top-[85px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
+            <button className='absolute top-[50px] start-0 w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
             onTouchStart={() => handleGamepadButtonClick("keydown", "C")} 
             onTouchEnd={() => handleGamepadButtonClick("keyup", "C")}
             onCopy={() => null}

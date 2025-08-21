@@ -1,18 +1,24 @@
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { MiniKitContextProvider } from '@/app/providers/MiniKitProvider';
 import "@coinbase/onchainkit/styles.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import { GameStateProvider } from "./providers/GameStateProvider";
+import { ConsoleStateProvider } from "./providers/ConsoleStateProvider";
+import ReactQueryProvider from "./providers/ReactQueryProvider";
+import { GameplayStateProvider } from "./providers/GameplayStateProvider";
+
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const URL = process.env.NEXT_PUBLIC_URL;
@@ -48,10 +54,18 @@ export default function RootLayout({
     <html lang="en">
       <body
         // max-w and max-h set according to instructions on https://miniapps.farcaster.xyz/docs/specification#size--orientation
-        className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[424px] max-h-[695px]`}
+        className={`${geistMono.className} antialiased max-w-[424px] max-h-[695px]`}
       >
         <MiniKitContextProvider>
-          {children}
+          <ReactQueryProvider>
+            <ConsoleStateProvider>
+              <GameStateProvider>
+                <GameplayStateProvider>
+                  {children}
+                </GameplayStateProvider>
+              </GameStateProvider>
+            </ConsoleStateProvider>
+          </ReactQueryProvider>
         </MiniKitContextProvider>
       </body>
     </html>
