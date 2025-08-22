@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useMiniKit } from '@coinbase/onchainkit/minikit';
 import { useAccount } from 'wagmi';
 import { Transition } from '@headlessui/react';
+import { sdk } from '@farcaster/miniapp-sdk';
 
 import { CONSOLE_STATE, ConsoleStateContext } from '@/app/providers/ConsoleStateProvider';
 import Play from '@/app/components/Display/Play';
@@ -29,7 +30,8 @@ function ConsoleControls({ruleInfo, cartridgeInfo, cartridgeData}:
 
     useEffect(() => {
         if (!isFrameReady) {
-        setFrameReady();
+            sdk.actions.ready({ disableNativeGestures: true })
+             .then(() =>setFrameReady());
         }
     }, [setFrameReady, isFrameReady]);
 
