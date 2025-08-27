@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import { Joystick } from 'react-joystick-component';
 import { IJoystickUpdateEvent } from 'react-joystick-component/build/lib/Joystick';
 import { useAccount } from 'wagmi';
+import { vibrate } from './ConsoleControls';
 
 
 // keymap from https://github.com/rives-io/riv/blob/main/rivemu-web/gamepad.js
@@ -106,13 +107,20 @@ function Gamepad() {
     <div className='w-full min-fit flex justify-between'>
         {/* directional buttons */}
         <div className='w-[150px] h-[150px] relative flex items-center'>
-            <Joystick size={120} sticky={false} baseColor="#374151" stickColor="#1f2937" move={handleMove} stop={handleStop}></Joystick>
+            <Joystick size={120} sticky={false} baseColor="#374151" stickColor="#1f2937" 
+             start={()=>vibrate()} 
+             move={handleMove} 
+             stop={handleStop}>
+            </Joystick>
         </div>
 
         {/* action buttons */}
         <div className='w-[150px] h-[150px] relative'>
             <button className='absolute top-0 end-[50px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
-            onTouchStart={() => handleGamepadButtonClick("keydown", "V")} 
+            onTouchStart={() => {
+                vibrate();
+                handleGamepadButtonClick("keydown", "V")
+            }}
             onTouchEnd={() => handleGamepadButtonClick("keyup", "V")}
             onCopy={() => null}
             >
@@ -120,7 +128,10 @@ function Gamepad() {
             </button>
 
             <button className='absolute top-[50px] start-[100px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
-            onTouchStart={() => handleGamepadButtonClick("keydown", "X")} 
+            onTouchStart={() => {
+                vibrate();
+                handleGamepadButtonClick("keydown", "X")
+            }} 
             onTouchEnd={() => handleGamepadButtonClick("keyup", "X")}
             onCopy={() => null}
             >
@@ -128,7 +139,10 @@ function Gamepad() {
             </button>
 
             <button className='absolute top-[100px] start-[50px] w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
-            onTouchStart={() => handleGamepadButtonClick("keydown", "Z")} 
+            onTouchStart={() => {
+                vibrate();
+                handleGamepadButtonClick("keydown", "Z");
+            }}
             onTouchEnd={() => handleGamepadButtonClick("keyup", "Z")}
             onCopy={() => null}
             >
@@ -136,7 +150,10 @@ function Gamepad() {
             </button>
 
             <button className='absolute top-[50px] start-0 w-[50px] h-[50px] bg-gray-700 active:bg-gray-800 rounded-full flex justify-center items-center'
-            onTouchStart={() => handleGamepadButtonClick("keydown", "C")} 
+            onTouchStart={() => {
+                vibrate();
+                handleGamepadButtonClick("keydown", "C")
+            }} 
             onTouchEnd={() => handleGamepadButtonClick("keyup", "C")}
             onCopy={() => null}
             >

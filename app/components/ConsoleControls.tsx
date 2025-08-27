@@ -11,13 +11,18 @@ import { sdk } from '@farcaster/miniapp-sdk';
 import { CONSOLE_STATE, ConsoleStateContext } from '@/app/providers/ConsoleStateProvider';
 import Play from '@/app/components/Display/Play';
 import { CartridgeInfo, RuleInfo } from '@/app/utils/utils';
-import gameGIF from "@public/game.gif";
 import { COMMAND, GAME_STATE, GameStateContext } from '@/app/providers/GameStateProvider';
 import { GameplayStateContext } from '@/app/providers/GameplayStateProvider';
 import Help from './Display/Help';
 import Leaderboard from './Display/Leaderboard';
 import Submit from './Display/Submit';
 
+
+export function vibrate() {
+    if (typeof window !== "undefined" && window.navigator.vibrate) {
+        window.navigator.vibrate(50);
+    }
+}
 
 function ConsoleControls({ruleInfo, cartridgeInfo, cartridgeData}:
 {ruleInfo:RuleInfo, cartridgeInfo:CartridgeInfo, cartridgeData:Uint8Array<ArrayBufferLike>}) {
@@ -47,18 +52,21 @@ function ConsoleControls({ruleInfo, cartridgeInfo, cartridgeData}:
     }, [gameplay])
 
     const handlePause = () => {
+        vibrate();
         if (consoleState === CONSOLE_STATE.PLAY) {
             setGameCommand(COMMAND.PAUSE);
         }
     }
 
     const handleRestart = () => {
+        vibrate();
         if (consoleState === CONSOLE_STATE.PLAY) {
             setGameCommand(COMMAND.RESTART);
         }
     }
 
     const handleLeaderboard = () => {
+        vibrate();
         // pause the game if it's running
         if (gameState === GAME_STATE.RUNNING) {
             handlePause();
@@ -72,6 +80,7 @@ function ConsoleControls({ruleInfo, cartridgeInfo, cartridgeData}:
     }
 
     const handleHelp = () => {
+        vibrate();
         // pause the game if it's running
         if (gameState === GAME_STATE.RUNNING) {
             handlePause();
@@ -138,7 +147,10 @@ function ConsoleControls({ruleInfo, cartridgeInfo, cartridgeData}:
                 :
                     <div className='emulator-screen'>
                         <div className='w-full h-full relative'>
-                            <Image src={gameGIF} alt={'game gif'} fill/>
+                            <Image fill
+                                style={{objectFit: "cover"}}
+                                src={"data:image/png;base64,"+cartridgeInfo.cover} alt={"Cartridge Cover"}
+                            />
                         </div>
                     </div>
             }

@@ -15,7 +15,7 @@ import { Parser } from 'expr-eval';
 
 function Play({ruleInfo, cartridgeData}:{ruleInfo:RuleInfo, cartridgeData:Uint8Array<ArrayBufferLike>}) {
   const { gameState, setGameState, gameCommand, setGameCommand } = useContext(GameStateContext);
-  const { setGameplayOwner, setGameplayLog, setGifResolution, addGifFrame } = useContext(GameplayStateContext);
+  const { setGameplayOwner, setGameplayLog, setGifResolution, addGifFrame, clearGifFrames } = useContext(GameplayStateContext);
 
   const { address } = useAccount();
   const rivemuRef = useRef<RivemuRef>(null);
@@ -39,7 +39,9 @@ function Play({ruleInfo, cartridgeData}:{ruleInfo:RuleInfo, cartridgeData:Uint8A
   useEffect(() => {
     if (gameCommand === COMMAND.RESTART) {
       rivemuRef.current?.start();
-      setGameState(GAME_STATE.RUNNING);
+      if (gameState == GAME_STATE.RUNNING) {
+        setGameState(GAME_STATE.RESTARTING);
+      }
     } else if (gameCommand === COMMAND.PAUSE) {
       if (gameState === GAME_STATE.RUNNING) {
         rivemuRef.current?.setSpeed(0);
@@ -91,6 +93,7 @@ function Play({ruleInfo, cartridgeData}:{ruleInfo:RuleInfo, cartridgeData:Uint8A
     console.log("rivemu_on_begin");
     setGameplayLog(null);
     setGameplayOwner(address || "0x");
+    clearGifFrames();
     setGifResolution(width, height);
 
     //setTimeout(() => {rivemuRef.current?.stop();}, 5000); // 5 seconds
@@ -101,6 +104,14 @@ function Play({ruleInfo, cartridgeData}:{ruleInfo:RuleInfo, cartridgeData:Uint8A
     outcard: ArrayBuffer,
     outhash: string
   ) {
+    // rivemu start calls finish when restarting, therefore
+    // we need to skip the onFinish.
+    // Otherwise, we are going to trigger the submission process.
+    if (gameState == GAME_STATE.RESTARTING) {
+      setGameState(GAME_STATE.RUNNING);
+      return;
+    }
+
     rivemuRef.current?.stop();
     console.log("rivemu_on_finish")
     let score: number | undefined = undefined;

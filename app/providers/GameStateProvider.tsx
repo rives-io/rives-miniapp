@@ -4,6 +4,7 @@ import { createContext, ReactNode, useState } from "react"
 
 export enum GAME_STATE {
     OFF,
+    RESTARTING,
     RUNNING,
     PAUSED
 }
