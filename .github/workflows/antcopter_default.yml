@@ -30,6 +30,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: antcopter-default
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Set up .env
         env:
             DOT_ENV_VARIABLES: >-
@@ -80,11 +83,11 @@ jobs:
             NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME: ${{vars.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME}}
             NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR: ${{vars.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR}}
             NEXT_PUBLIC_URL: ${{vars.NEXT_PUBLIC_URL}}
-            NEXT_PUBLIC_APP_ICON: "${{ env.NEXT_PUBLIC_URL }}/icon.png"
-            NEXT_PUBLIC_WEBHOOK_URL: "${{ env.NEXT_PUBLIC_URL }}/api/webhook"
-            NEXT_PUBLIC_APP_SPLASH_IMAGE: "${{ env.NEXT_PUBLIC_URL }}/splash.png"
-            NEXT_PUBLIC_APP_HERO_IMAGE: "${{ env.NEXT_PUBLIC_URL }}/hero.png"
-            NEXT_PUBLIC_APP_OG_IMAGE: "${{ env.NEXT_PUBLIC_URL }}/hero.png"
+            NEXT_PUBLIC_APP_ICON: "${{ vars.NEXT_PUBLIC_URL }}/icon.png"
+            NEXT_PUBLIC_WEBHOOK_URL: "${{ vars.NEXT_PUBLIC_URL }}/api/webhook"
+            NEXT_PUBLIC_APP_SPLASH_IMAGE: "${{ vars.NEXT_PUBLIC_URL }}/splash.png"
+            NEXT_PUBLIC_APP_HERO_IMAGE: "${{ vars.NEXT_PUBLIC_URL }}/hero.png"
+            NEXT_PUBLIC_APP_OG_IMAGE: "${{ vars.NEXT_PUBLIC_URL }}/hero.png"
 
         run: |
             : > .env   # clears or creates .env
@@ -94,8 +97,6 @@ jobs:
             echo Final .env:
             cat .env
 
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Detect package manager
         id: detect-package-manager
         run: |
