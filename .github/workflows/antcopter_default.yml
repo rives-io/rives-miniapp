@@ -2,7 +2,7 @@
 #
 # To get started with Next.js see: https://nextjs.org/docs/getting-started
 #
-name: Deploy Next.js site to Pages
+name: Deploy Antcopter Default Miniapp to Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -54,6 +54,11 @@ jobs:
               NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME
               NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR
               NEXT_PUBLIC_URL
+              NEXT_PUBLIC_APP_ICON
+              NEXT_PUBLIC_WEBHOOK_URL
+              NEXT_PUBLIC_APP_SPLASH_IMAGE
+              NEXT_PUBLIC_APP_HERO_IMAGE
+              NEXT_PUBLIC_APP_OG_IMAGE
             NEXT_PUBLIC_APP_ADDR: "0xECB28678045a94F8b96EdE1c8203aDEa81F8AAe3"
             NEXT_PUBLIC_WORLD_ADDR: "0x04969e1d36d43515cc6493a286021b44b0fce6f2"
             NEXT_PUBLIC_NETWORK_CHAIN_ID: "0x2105"
@@ -75,8 +80,14 @@ jobs:
             NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME: ${{vars.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME}}
             NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR: ${{vars.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR}}
             NEXT_PUBLIC_URL: ${{vars.NEXT_PUBLIC_URL}}
+            NEXT_PUBLIC_APP_ICON: "${{ env.NEXT_PUBLIC_URL }}/icon.png"
+            NEXT_PUBLIC_WEBHOOK_URL: "${{ env.NEXT_PUBLIC_URL }}/api/webhook"
+            NEXT_PUBLIC_APP_SPLASH_IMAGE: "${{ env.NEXT_PUBLIC_URL }}/splash.png"
+            NEXT_PUBLIC_APP_HERO_IMAGE: "${{ env.NEXT_PUBLIC_URL }}/hero.png"
+            NEXT_PUBLIC_APP_OG_IMAGE: "${{ env.NEXT_PUBLIC_URL }}/hero.png"
+
         run: |
-            rm .env
+            : > .env   # clears or creates .env
             for var in $DOT_ENV_VARIABLES; do
               echo $var=${!var} >> .env
             done
